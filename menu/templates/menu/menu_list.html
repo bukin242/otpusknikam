@@ -1,0 +1,7 @@
+{% if object_list %}
+<ul class="list-group list-unstyled">
+    {% for object in object_list %}
+        <li><a href="{{ object.url }}" class="list-group-item {% if object.active %}active{% endif %}">{{ object.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}

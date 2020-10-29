@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="1" model="menu.menu">
+        <field type="CharField" name="name">top</field>
+    </object>
+    <object pk="2" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Квартиры</field>
+        <field type="CharField" name="url">/flat/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+    <object pk="3" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Комнаты</field>
+        <field type="CharField" name="url">/room/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+    <object pk="4" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Дома</field>
+        <field type="CharField" name="url">/house/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+    <object pk="5" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Хостелы</field>
+        <field type="CharField" name="url">/hostel/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+    <object pk="6" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Мини-отели</field>
+        <field type="CharField" name="url">/mini/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+    <object pk="7" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Гостиницы</field>
+        <field type="CharField" name="url">/hotel/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+    <object pk="8" model="menu.menuitem">
+        <field to="menu.menu" name="parent" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Санатории</field>
+        <field type="CharField" name="url">/pension/</field>
+        <field type="IntegerField" name="order">0</field>
+    </object>
+</django-objects>

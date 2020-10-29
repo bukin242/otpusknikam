@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+{% block header %}Вход{% endblock %}
+{% block content %}
+
+    {% if form %}
+        {{ form.media }}
+
+        <fieldset class="width_form col_5 alpha">
+            <form method="post" action="{% url 'users_login' %}" class="vertical">
+                {% csrf_token %}{% load honeypot %}{% render_honeypot_field %}
+
+                {{ form.as_p }}
+
+                <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
+                <button type="submit" class="pop blue">Войти</button>
+                <div class="clear"></div>
+            </form>
+        </fieldset>
+    {% endif %}
+
+    {% include 'utils/required_forms.html' %}
+
+{% endblock %}

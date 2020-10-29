@@ -1,0 +1,28 @@
+{% load image_tags %}
+
+{% for object in object_list %}
+    <div class="col_12 item">
+
+        <a href="{{ object.get_absolute_url }}" class="h3 preview" title="{{ object.type_realty_name }} {{ object.name }}"><img src="{{ object.get_image_main|crop:'356x200' }}" alt="{{ object.name }}" align="left" class="pull-left"/> <span class="link-text">{{ object }}</span>
+          <div class="pull-right price">{{ object.price }} <i class="fa fa-rub"></i> <span class="gray">в сутки</span></div>
+        </a>
+
+        <div><b>{{ object.type_realty_name }}</b>: {{ object.address }}</div>
+        <div>{{ object.sleep }}</div>
+        {% if object.metro %}
+        <div>До метро: {{ object.metro }} мин. {{ object.get_move_metro_display|lower }}</div>
+        {% endif %}
+        {% if object.type_beach %}
+        <div>
+          Пляж: {{ object.get_type_beach_display }},
+          {% if object.beach %}
+            {{ object.beach }} мин. {{ object.get_move_beach_display|lower }}
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <a href="{{ object.get_absolute_url }}" class="button green">Смотреть</a>
+        <div class="clear"></div>
+        <hr />
+    </div>
+{% endfor %}

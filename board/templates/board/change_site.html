@@ -1,0 +1,18 @@
+<div class="hover change_site">
+
+    <a class="button" href="/" onclick="return false;">
+        {% if current_site %}
+            {{ current_site.name }}
+        {% else %}
+            Выбрать город
+        {% endif %}
+        <i class="fa fa-chevron-down"></i>
+    </a>
+
+    <ul class="menu vertical right">
+        {% for x in sites %}
+            <li><a href="http://{{ x }}/">{{ x.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+</div>

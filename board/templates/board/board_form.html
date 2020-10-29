@@ -1,0 +1,1132 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+    {{ wizard.form.media }}
+{% endblock %}
+
+{% block title %}Разместите объявление о сдаче жилья {% if city %}в {{ city.where }}{% endif %} посуточно. Сдать {% if type_realty %}{{ type_realty_name|lower }} {% endif %}выгодно и без посредников.{% endblock %}
+{% block keywords %}сдать {% if type_realty %}{{ type_realty_name|lower }} {% endif %}{% if city %}в {{ city.where|lower }}{% endif %} посуточно{% endblock %}
+{% block description %}Хотите сдать {% if type_realty %}{{ type_realty_name|lower }} {% endif %}{% if city %}в {{ city.where }}{% endif %} посуточно, быстро, без посредников? Разместите объявление на «Отпускникам.ру» — это удобно и информативно.{% endblock %}
+{% block header %}{% if type_realty %} Сдать {{ type_realty_name|lower }}{% endif %} {% if city %}в {{ city.where }}{% endif %} посуточно{% endblock %}
+
+{% block content %}
+<form action="" method="post" class="board tab-content" enctype="multipart/form-data">
+{% csrf_token %}
+
+{{ wizard.management_form }}
+<input type="hidden" name="from_step" value="{{ wizard.steps.current }}" />
+
+{% with wizard.form as form %}
+
+    <div class="h4">
+        Шаг {{ wizard.steps.step1 }} из {{ wizard.steps.count }}: &nbsp;
+
+        {% if wizard.steps.current <= '0' %}
+            <a href="#" class="button orange">Описание</a>
+        {% else %}
+            <button name="wizard_goto_step" type="submit" value="0">Описание</button>
+        {% endif %}
+
+        {% if wizard.steps.current == '1' %}
+            &gt; <a href="#" class="button orange">Параметры</a>
+        {% else %}
+            &gt; <button name="wizard_goto_step" type="submit" value="1" {% if wizard.steps.current < '1' %} disabled="disabled"{% endif %}>Параметры</button>
+        {% endif %}
+
+
+        {% if wizard.steps.current == '2' %}
+            &gt; <a href="#" class="button orange">Цены</a>
+        {% else %}
+            &gt; <button name="wizard_goto_step" type="submit" value="2" {% if wizard.steps.current < '2' %} disabled="disabled"{% endif %}>Цены</button>
+        {% endif %}
+
+
+        {% if wizard.steps.current == '3' %}
+            &gt; <a href="#" class="button orange">Фотографии</a>
+        {% else %}
+            &gt; <button name="wizard_goto_step" type="submit" value="3" {% if wizard.steps.current < '3' %} disabled="disabled"{% endif %}>Фотографии</button>
+        {% endif %}
+
+    </div>
+
+
+    {% if wizard.steps.current == '0' %}
+
+        {% if form.city.value %}
+            {{ form.city.errors }}
+            {{ form.city }}
+        {% else %}
+            <input id="id_{{ wizard.steps.current }}-city" type="hidden" name="{{ wizard.steps.current }}-city" value="{{ city.pk }}"/>
+        {% endif %}
+
+        {% if form.type_realty.value %}
+            {{ form.type_realty.errors }}
+            {{ form.type_realty }}
+        {% else %}
+            <input id="id_{{ wizard.steps.current }}-type_realty" type="hidden" name="{{ wizard.steps.current }}-type_realty" value="{{ type_realty }}"/>
+        {% endif %}
+
+
+        <fieldset><span class="h4"><i class="fa fa-map-marker"></i> Адрес</span></fieldset>
+        <table class="striped">
+        <tr class="{{ form.street.name }}">
+            <th>{{ form.street.label }}</th>
+            <th>
+                {{ form.street.errors }}
+                {{ form.street }}
+            </th>
+        </tr>
+        <tr class="{{ form.place.name }}">
+            <th>{{ form.place.label }}</th>
+            <th>
+                {{ form.place.errors }}
+                {{ form.place }}
+            </th>
+        </tr>
+        {% if request.site.city.metro %}
+        <tr class="{{ form.metro.name }}">
+            <th>{{ form.metro.label }}</th>
+            <th>
+                {{ form.metro.errors }}
+                {{ form.metro }}
+
+                {{ form.move_metro.errors }}
+                {{ form.move_metro }}
+            </th>
+        </tr>
+        {% endif %}
+        <tr class="{{ form.type_beach.name }}">
+            <th>{{ form.type_beach.label }}</th>
+            <th>
+                {{ form.type_beach.errors }}
+                {{ form.type_beach }}
+
+                &nbsp;
+                {{ form.beach.label }}
+                {{ form.beach.errors }}
+                {{ form.beach }}
+                {{ form.move_beach.errors }}
+                {{ form.move_beach }}
+            </th>
+        </tr>
+        <tr class="{{ form.landmark.name }}">
+            <th>{{ form.landmark.label }}</th>
+            <th>
+                {{ form.landmark.errors }}
+                {{ form.landmark }}
+            </th>
+        </tr>
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-newspaper-o"></i> Объявление</span></fieldset>
+        <table class="striped">
+        <tr class="{{ form.name.name }}">
+            <th>{{ form.name.label }}</th>
+            <th>
+                {{ form.name.errors }}
+                {{ form.name }}
+            </th>
+        </tr>
+        <tr class="{{ form.text.name }}">
+            <th>{{ form.text.label }}</th>
+            <th>
+                {{ form.text.errors }}
+                {{ form.text }}
+            </th>
+        </tr>
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-phone"></i> Контактные данные</span></fieldset>
+        <table class="striped">
+        <tr class="{{ form.status.name }}">
+            <th>{{ form.status.label }}</th>
+            <th>
+                {{ form.status.errors }}
+                {{ form.status }}
+            </th>
+        </tr>
+        <tr class="{{ form.phone.name }}">
+            <th>{{ form.phone.label }}</th>
+            <th>
+                {{ form.phone.errors }}
+                {{ form.phone }}
+            </th>
+        </tr>
+        <tr class="{{ form.email.name }}">
+            <th>{{ form.email.label }}</th>
+            <th>
+                {{ form.email.errors }}
+                {{ form.email }}
+            </th>
+        </tr>
+        <tr class="{{ form.contact_name.name }}">
+            <th>{{ form.contact_name.label }}</th>
+            <th>
+                {{ form.contact_name.errors }}
+                {{ form.contact_name }}
+            </th>
+        </tr>
+        </table>
+
+
+        {% if not user.is_authenticated %}
+        <ul class="tabs left">
+            <li><a href="#register">Регистрация</a></li>
+            <li><a href="#login">Вход</a></li>
+        </ul>
+
+        <div id="register" class="tab-content">
+            <table>
+            <tr class="{{ form.name_register.name }}">
+                <th>{{ form.name_register.label }}</th>
+                <th>
+                    {{ form.name_register.errors }}
+                    {{ form.name_register }}
+                </th>
+            </tr>
+            <tr class="{{ form.email_register.name }}">
+                <th>{{ form.email_register.label }}</th>
+                <th>
+                    {{ form.email_register.errors }}
+                    {{ form.email_register }}
+                </th>
+            </tr>
+            <tr class="{{ form.password_register.name }}">
+                <th>{{ form.password_register.label }}</th>
+                <th>
+                    {{ form.password_register.errors }}
+                    {{ form.password_register }}
+                </th>
+            </tr>
+            <tr class="{{ form.subscribe_register.name }}">
+                <td colspan="2">
+                    <label>
+                        {{ form.subscribe_register.errors }}
+                        {{ form.subscribe_register }}
+                        {{ form.subscribe_register.label }}
+                    </label>
+                </td>
+            </tr>
+            </table>
+        </div>
+
+        <div id="login" class="tab-content">
+            <table>
+            <tr class="{{ form.email_login.name }}">
+                <th>{{ form.email_login.label }}</th>
+                <th>
+                    {{ form.email_login.errors }}
+                    {{ form.email_login }}
+                </th>
+            </tr>
+            <tr class="{{ form.password_login.name }}">
+                <th>{{ form.password_login.label }}</th>
+                <th>
+                    {{ form.password_login.errors }}
+                    {{ form.password_login }}
+                </th>
+            </tr>
+            </table>
+        </div>
+        {% endif %}
+
+
+    {% elif wizard.steps.current == '1' %}
+
+
+        <fieldset><span class="h4"><i class="fa fa-building-o"></i> Здание</span></fieldset>
+        <table class="striped">
+        {% if form.floor_number %}
+        <tr class="{{ form.floor_number.name }}">
+            <th>{{ form.floor_number.label }}</th>
+            <th>
+                {{ form.floor_number.errors }}
+                {{ form.floor_number }}
+            </th>
+        </tr>
+        {% endif %}
+        <tr class="{{ form.floors.name }}">
+            <th>{{ form.floors.label }}</th>
+            <th>
+                {{ form.floors.errors }}
+                {{ form.floors }}
+            </th>
+        </tr>
+        {% if form.elevator %}
+        <tr class="{{ form.elevator.name }}">
+            <th>{{ form.elevator.label }}</th>
+            <th>
+                {{ form.elevator.errors }}
+                {{ form.elevator }}
+            </th>
+        </tr>
+        {% endif %}
+        {% if form.type_house %}
+        <tr class="{{ form.type_house.name }}">
+            <th>{{ form.type_house.label }}</th>
+            <th>
+                {{ form.type_house.errors }}
+                {{ form.type_house }}
+            </th>
+        </tr>
+        {% endif %}
+        {% if form.housing_estate %}
+        <tr class="{{ form.housing_estate.name }}">
+            <th>{{ form.housing_estate.label }}</th>
+            <th>
+                {{ form.housing_estate.errors }}
+                {{ form.housing_estate }}
+            </th>
+        </tr>
+        {% endif %}
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-bed"></i> Помещение</span></fieldset>
+        <table class="striped">
+        {% if form.type_number %}
+        <tr class="{{ form.type_number.name }}">
+            <th>{{ form.type_number.label }}</th>
+            <th>
+                {{ form.type_number.errors }}
+                {{ form.type_number }}
+            </th>
+        </tr>
+        {% endif %}
+        <tr class="{{ form.sleep.name }}">
+            <th>{{ form.sleep.label }}</th>
+            <th>
+                {{ form.sleep.errors }}
+                {{ form.sleep }}
+            </th>
+        </tr>
+        {% if form.count %}
+        <tr class="{{ form.count.name }}">
+            <th>{{ form.count.label }}</th>
+            <th>
+                {{ form.count.errors }}
+                {{ form.count }}
+            </th>
+        </tr>
+        {% endif %}
+        {% if form.space %}
+        <tr class="{{ form.space.name }}">
+            <th>{{ form.space.label }}</th>
+            <th>
+                {{ form.space.errors }}
+                {{ form.space }}
+            </th>
+        </tr>
+        {% endif %}
+        {% if form.total_space %}
+        <tr class="{{ form.total_space.name }}">
+            <th>{{ form.total_space.label }}</th>
+            <th>
+                {{ form.total_space.errors }}
+                {{ form.total_space }}
+            </th>
+        </tr>
+        {% endif %}
+        {% if form.living_space %}
+        <tr class="{{ form.living_space.name }}">
+            <th>{{ form.living_space.label }}</th>
+            <th>
+                {{ form.living_space.errors }}
+                {{ form.living_space }}
+            </th>
+        </tr>
+        {% endif %}
+        {% if form.kitchen %}
+        <tr class="{{ form.kitchen.name }}">
+            <th>{{ form.kitchen.label }}</th>
+            <th>
+                {{ form.kitchen.errors }}
+                {{ form.kitchen }}
+            </th>
+        </tr>
+        {% endif %}
+        <tr class="{{ form.repair.name }}">
+            <th>{{ form.repair.label }}</th>
+            <th>
+                {{ form.repair.errors }}
+                {{ form.repair }}
+            </th>
+        </tr>
+        <tr class="{{ form.balcony.name }}">
+            <th>{{ form.balcony.label }}</th>
+            <th>
+                {{ form.balcony.errors }}
+                {{ form.balcony }}
+            </th>
+        </tr>
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-magic"></i> Удобства</span></fieldset>
+        <div class="labels comfort">
+            {% if form.stars %}
+            <label class="col_3 right alpha omega">
+                {{ form.stars.label }}
+                {{ form.stars }}
+            </label>
+            {% endif %}
+            {% if form.cleaning %}
+            <label class="col_3 right alpha omega">
+                {{ form.cleaning.label }}
+                {{ form.cleaning }}
+            </label>
+            {% endif %}
+            {% if form.bed_linen %}
+            <label class="col_3 right alpha omega">
+                {{ form.bed_linen.label }}
+                {{ form.bed_linen }}
+            </label>
+            {% endif %}
+            <label class="col_3 right alpha omega">
+                {{ form.type_bed.label }}
+                {{ form.type_bed }}
+            </label>
+            {% if form.shower %}
+            <label class="col_3 right alpha omega">
+                {{ form.shower.label }}
+                {{ form.shower }}
+            </label>
+            {% endif %}
+            {% if form.wc %}
+            <label class="col_3 right alpha omega">
+                {{ form.wc.label }}
+                {{ form.wc }}
+            </label>
+            {% endif %}
+            <label class="col_3 right alpha omega">
+                {{ form.linens.label }}
+                {{ form.linens }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.tv.label }}
+                {{ form.tv }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.phone.label }}
+                {{ form.phone }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.conditioner.label }}
+                {{ form.conditioner }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.fan.label }}
+                {{ form.fan }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.heater.label }}
+                {{ form.heater }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.washer.label }}
+                {{ form.washer }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.shower_cabine.label }}
+                {{ form.shower_cabine }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.table.label }}
+                {{ form.table }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.cupboard.label }}
+                {{ form.cupboard }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.nightstand.label }}
+                {{ form.nightstand }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.mirror.label }}
+                {{ form.mirror }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.iron.label }}
+                {{ form.iron }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.dishes.label }}
+                {{ form.dishes }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.frig.label }}
+                {{ form.frig }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.microwave.label }}
+                {{ form.microwave }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.coffee.label }}
+                {{ form.coffee }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.kettle.label }}
+                {{ form.kettle }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.parking.label }}
+                {{ form.parking }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.protected.label }}
+                {{ form.protected }}
+            </label>
+            {% if form.internet %}
+            <label class="col_3 right alpha omega">
+                {{ form.internet.label }}
+                {{ form.internet }}
+            </label>
+            {% endif %}
+            {% if form.cooker %}
+            <label class="col_3 right alpha omega">
+                {{ form.cooker.label }}
+                {{ form.cooker }}
+            </label>
+            {% endif %}
+            {% if form.terrace %}
+            <label class="col_3 right alpha omega">
+                {{ form.terrace.label }}
+                {{ form.terrace }}
+            </label>
+            {% endif %}
+            {% if form.billiard %}
+            <label class="col_3 right alpha omega">
+                {{ form.billiard.label }}
+                {{ form.billiard }}
+            </label>
+            {% endif %}
+            {% if form.pool %}
+            <label class="col_3 right alpha omega">
+                {{ form.pool.label }}
+                {{ form.pool }}
+            </label>
+            {% endif %}
+            {% if form.sauna %}
+            <label class="col_3 right alpha omega">
+                {{ form.sauna.label }}
+                {{ form.sauna }}
+            </label>
+            {% endif %}
+            {% if form.solarium %}
+            <label class="col_3 right alpha omega">
+                {{ form.solarium.label }}
+                {{ form.solarium }}
+            </label>
+            {% endif %}
+            {% if form.massage %}
+            <label class="col_3 right alpha omega">
+                {{ form.massage.label }}
+                {{ form.massage }}
+            </label>
+            {% endif %}
+            {% if form.gym %}
+            <label class="col_3 right alpha omega">
+                {{ form.gym.label }}
+                {{ form.gym }}
+            </label>
+            {% endif %}
+            {% if form.restroom %}
+            <label class="col_3 right alpha omega">
+                {{ form.restroom.label }}
+                {{ form.restroom }}
+            </label>
+            {% endif %}
+            {% if form.canteen %}
+            <label class="col_3 right alpha omega">
+                {{ form.canteen.label }}
+                {{ form.canteen }}
+            </label>
+            {% endif %}
+            {% if form.taxi %}
+            <label class="col_3 right alpha omega">
+                {{ form.taxi.label }}
+                {{ form.taxi }}
+            </label>
+            {% endif %}
+            {% if form.beach %}
+            <label class="col_3 right alpha omega">
+                {{ form.beach.label }}
+                {{ form.beach }}
+            </label>
+            {% endif %}
+            {% if form.excursions %}
+            <label class="col_3 right alpha omega">
+                {{ form.excursions.label }}
+                {{ form.excursions }}
+            </label>
+            {% endif %}
+            {% if form.animation %}
+            <label class="col_3 right alpha omega">
+                {{ form.animation.label }}
+                {{ form.animation }}
+            </label>
+            {% endif %}
+            {% if form.wifi %}
+            <label class="col_3 right alpha omega">
+                {{ form.wifi.label }}
+                {{ form.wifi }}
+            </label>
+            {% endif %}
+            <div class="clear"></div>
+            <label class="col_3 right alpha omega">
+                {{ form.other_comfort.label }}
+            </label>
+            <label class="col_9 alpha omega">
+                {{ form.other_comfort }}
+            </label>
+        </div>
+
+
+        {% if type_realty == 'hostel' or type_realty == 'mini' or type_realty == 'hotel' or type_realty == 'pension' %}
+        <fieldset><span class="h4"><i class="fa fa-star-o"></i> В стоимость включено</span></fieldset>
+        <div class="labels include">
+            <label class="col_3 right alpha omega">
+                {{ form.breakfast_incude.label }}
+                {{ form.breakfast_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.lunch_incude.label }}
+                {{ form.lunch_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.dinner_incude.label }}
+                {{ form.dinner_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.safe_incude.label }}
+                {{ form.safe_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.fen_incude.label }}
+                {{ form.fen_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.bathrobe_incude.label }}
+                {{ form.bathrobe_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.sneakers_incude.label }}
+                {{ form.sneakers_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.towels_incude.label }}
+                {{ form.towels_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.minibar_incude.label }}
+                {{ form.minibar_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.baggage_incude.label }}
+                {{ form.baggage_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.transfer_incude.label }}
+                {{ form.transfer_incude }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.shizlong_incude.label }}
+                {{ form.shizlong_incude }}
+            </label>
+            <div class="clear"></div>
+            <label class="col_3 right alpha omega">
+                {{ form.additional_incude.label }}
+            </label>
+            <label class="col_9 alpha omega">
+                {{ form.additional_incude }}
+            </label>
+        </div>
+
+
+        <fieldset><span class="h4"><i class="fa fa-star-half-o"></i> Отдельно оплачивается</span></fieldset>
+        <div class="labels paid">
+            <label class="col_3 right alpha omega">
+                {{ form.safe_paid.label }}
+                {{ form.safe_paid }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.fen_paid.label }}
+                {{ form.fen_paid }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.internet_paid.label }}
+                {{ form.internet_paid }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.minibar_paid.label }}
+                {{ form.minibar_paid }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.transfer_paid.label }}
+                {{ form.transfer_paid }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.shizlong_paid.label }}
+                {{ form.shizlong_paid }}
+            </label>
+            <div class="clear"></div>
+            <label class="col_3 right alpha omega">
+                {{ form.additional_paid.label }}
+            </label>
+            <label class="col_9 alpha omega">
+                {{ form.additional_paid }}
+            </label>
+        </div>
+        {% endif %}
+
+
+        <fieldset><span class="h4"><i class="fa fa-street-view"></i> Рядом расположены</span></fieldset>
+        <div class="labels nearby">
+            <label class="col_3 right alpha omega">
+                {{ form.stores.label }}
+                {{ form.stores }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.market.label }}
+                {{ form.market }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.shopping_center.label }}
+                {{ form.shopping_center }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.bars.label }}
+                {{ form.bars }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.cafe.label }}
+                {{ form.cafe }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.restaurants.label }}
+                {{ form.restaurants }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.pizzeria.label }}
+                {{ form.pizzeria }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.fast_food.label }}
+                {{ form.fast_food }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.salon.label }}
+                {{ form.salon }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.nightclub.label }}
+                {{ form.nightclub }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.spa.label }}
+                {{ form.spa }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.boat_trips.label }}
+                {{ form.boat_trips }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.bike.label }}
+                {{ form.bike }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.attractions.label }}
+                {{ form.attractions }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.waterpark.label }}
+                {{ form.waterpark }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.museum.label }}
+                {{ form.museum }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.theater.label }}
+                {{ form.theater }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.cinema.label }}
+                {{ form.cinema }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.park.label }}
+                {{ form.park }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.forest.label }}
+                {{ form.forest }}
+            </label>
+            <div class="clear"></div>
+            <label class="col_3 right alpha omega">
+                {{ form.lions.label }}
+            </label>
+            <label class="col_9 alpha omega">
+                {{ form.lions }}
+            </label>
+        </div>
+
+
+        <fieldset><span class="h4"><i class="fa fa-asterisk"></i> Условия</span></fieldset>
+        <div class="labels conditions">
+            <label class="col_3 right alpha omega">
+                {{ form.around.label }}
+                {{ form.around }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.child.label }}
+                {{ form.child }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.animal.label }}
+                {{ form.animal }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.smoke.label }}
+                {{ form.smoke }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.party.label }}
+                {{ form.party }}
+            </label>
+            <label class="col_3 right alpha omega">
+                {{ form.document.label }}
+                {{ form.document }}
+            </label>
+            <div class="clear"></div>
+            <label class="col_3 right alpha omega">
+                {{ form.other_condition.label }}
+            </label>
+            <label class="col_9 alpha omega">
+                {{ form.other_condition }}
+            </label>
+        </div>
+
+
+    {% elif wizard.steps.current == '2' %}
+
+
+        <fieldset><span class="h4"><i class="fa fa-money"></i> Стоимость</span></fieldset>
+        <table class="striped">
+        <tr class="{{ form.price.name }}">
+            <th>{{ form.price.label }}</th>
+            <th>
+                {{ form.price.errors }}
+                {{ form.price }} &nbsp;руб.
+            </th>
+        </tr>
+        <tr class="{{ form.prepay.name }}">
+            <th>{{ form.prepay.label }}</th>
+            <th>
+                {{ form.prepay.errors }}
+                {{ form.prepay }} &nbsp;%
+            </th>
+        </tr>
+        <tr class="{{ form.additional_bed.name }}">
+            <th>{{ form.additional_bed.label }}</th>
+            <th>
+                {{ form.additional_bed.errors }}
+                {{ form.additional_bed }} &nbsp;руб.
+            </th>
+        </tr>
+        <tr class="{{ form.checkin.name }}">
+            <th>{{ form.checkin.label }}</th>
+            <th>
+                {{ form.checkin.errors }}
+                {{ form.checkin }}
+            </th>
+        </tr>
+        <tr class="{{ form.checkout.name }}">
+            <th>{{ form.checkout.label }}</th>
+            <th>
+                {{ form.checkout.errors }}
+                {{ form.checkout }}
+            </th>
+        </tr>
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-thumbs-o-up"></i> Скидки</span></fieldset>
+        {{ form_discount.management_form }}
+        <table class="striped">
+        {% for discount in form_discount %}
+        <tr class="{{ discount.stay.name }}">
+            <th>{{ discount.stay.label }}</th>
+            <th>
+                {{ discount.stay.errors }}
+                {{ discount.discount.errors }}
+                {{ discount.stay }} &nbsp;дней. &nbsp;{{ discount.discount.label }}: {{ discount.discount }} &nbsp;%.  &nbsp;{{ discount.conditions.label }} {{ discount.conditions }}
+                {{ discount.conditions.errors }}
+            </th>
+        </tr>
+        {% endfor %}
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-list-alt"></i> Прайс-лист по месяцам</span></fieldset>
+        {{ form_pricemonth.management_form }}
+        <table class="striped">
+        {% for price in form_pricemonth %}
+        <tr class="{{ price.price.name }}">
+            <td>
+                {{ price.from_date.errors }}
+                {{ price.from_date.label }}
+                {{ price.from_date }}
+                {{ price.to_date.errors }}
+                {{ price.to_date.label|lower }}
+                {{ price.to_date }} &nbsp;
+                {{ price.price.errors }}
+                {{ price.price.label }}
+                {{ price.price }} &nbsp;руб.
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-file-text-o"></i> Собственный прайс-лист</span></fieldset>
+        {{ form_ownprice.management_form }}
+        <table class="striped">
+        {% for price in form_ownprice %}
+        <tr class="{{ price.price.name }}">
+            <td>
+                {% if forloop.first %}
+                    <div class="gray">{{ price.price.help_text }}</div>
+                {% endif %}
+
+                {{ price.price.errors }}
+                {{ price.price.label }}
+                {{ price.price }}
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+
+
+        <fieldset><span class="h4"><i class="fa fa-check-circle-o"></i> Предоставляется</span></fieldset>
+        <div class="labels conditions">
+            <label class="col_4 right alpha omega">
+                {{ form.documents.label }}
+                {{ form.documents }}
+            </label>
+            <label class="col_4 right alpha omega">
+                {{ form.clearing.label }}
+                {{ form.clearing }}
+            </label>
+            <label class="col_4 right alpha omega">
+                {{ form.agreement.label }}
+                {{ form.agreement }}
+            </label>
+        </div>
+
+    {% elif wizard.steps.current == '3' %}
+
+        <div class="hash"><input type="hidden" name="hash_image" value="{{ form.hash_image.value }}" /></div>
+
+        <link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+        <script src="{% static 'dropzone/js/dropzone.js' %}"></script>
+        <script src="{% static 'base/js/jquery-ui.min.js' %}"></script>
+
+        <fieldset><span class="h4"><i class="fa fa-picture-o"></i> Фотографии</span></fieldset>
+        <div class="dropzone sortable" id="myDropzone"></div>
+
+
+        <div class="nojs">
+
+            {{ form_image.management_form }}
+
+            <table class="striped">
+            {% for image in form_image %}
+                    <tr>
+                        <th>
+                            {{ image.image.label }}
+                        </th>
+                        <td>
+                            <div class="width_input">
+                                {% if forloop.first %}
+                                    <div class="gray">{{ image.image.help_text }}</div>
+                                {% endif %}
+
+                                {{ image.image.errors }}
+                                {{ image.image }}
+                                <label class="pull-right">
+                                    {{ image.main.label }}
+                                    <input type="radio" name="main" value="{{ image.main.html_name }}" {% if forloop.first %}checked="checked"{% endif %}/>
+                                </label>
+                                {{ image.hash_image }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ image.name.label }}
+                        </th>
+                        <td>
+                            {{ image.name.errors }}
+                            {{ image.name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ image.order.label }}
+                        </th>
+                        <td>
+                            {{ image.order.errors }}
+                            {{ image.order }}
+                        </td>
+                    </tr>
+            {% endfor %}
+            </table>
+
+        </div>
+
+
+        <script language="javascript">
+
+        function get_count_preview(){
+
+            return $('.dropzone .dz-preview').length;
+
+        }
+
+        function reload_position(){
+
+            count = get_count_preview();
+
+            for (var i = 0; i < count; i++) {
+
+                if($('.dropzone .dz-preview').length)
+                {
+                    $($('.dropzone .dz-preview')[i]).find('.dz-order input').val(i);
+
+                }
+
+            }
+
+        }
+
+        $('.sortable').sortable({
+            placeholder: 'dz-placeholder',
+            beforeStop: function(event, ui) {
+                reload_position();
+            }
+        });
+
+        $('.sortable').disableSelection();
+
+        $('.nojs').html('');
+        $('.dropzone').show();
+
+        hash_image = $('.hash input').val();
+        thumbnail_size = 165;
+
+        function checked_first() {
+
+            if(!$('.dz-preview .dz-main input:checked').length)
+            {
+                $('.dz-preview .dz-main input').first().prop('checked', true);
+
+            }
+
+        }
+
+        Dropzone.options.myDropzone = {
+
+            init: function() {
+
+              this.on('complete', function(file) {
+
+                    if('xhr' in file)
+                    {
+
+                        response = JSON.parse(file.xhr.responseText);
+                        pk = response.pk
+
+                        $(file.previewElement).find('.dz-main').html('Превью: <input type="radio" name="main" value="' + pk + '" />');
+                        $(file.previewElement).find('.dz-name').html('<input type="text" name="name[' + pk + ']" value="" placeholder="Название" style="width:' + thumbnail_size + 'px;" onclick="this.focus();"/>');
+                        $(file.previewElement).find('.dz-order').html('<input type="hidden" name="order[' + pk + ']" value="0" />');
+                    }
+
+                    checked_first();
+                    reload_position();
+              });
+
+              this.on('removedfile', function(file) {
+
+                    if('xhr' in file)
+                    {
+
+                        response = JSON.parse(file.xhr.responseText);
+                        $.post("{% url 'image_delete' %}", {'pk': response.pk, hash_image});
+                    }
+
+                    checked_first();
+                    reload_position();
+              });
+            },
+
+            url: "{% url 'image_upload' %}",
+            paramName: 'image',
+            params: {'hash_image': hash_image},
+            thumbnailWidth: thumbnail_size,
+            thumbnailHeight: thumbnail_size,
+            maxFiles: 20,
+            addRemoveLinks: true,
+            dictDefaultMessage: "Перенесите файлы для загрузки",
+            dictFallbackMessage: "Ваш браузер не поддерживает загрузку файлов перетаскиванием.",
+            dictFallbackText: "Пожалуйста используйте форму ниже, чтобы загрузить файлы.",
+            dictFileTooBig: "Файл сликом большой ({{filesize}}МБ). Максимальный размер файла: {{maxFilesize}}МБ.",
+            dictInvalidFileType: "Вы не можете загружать файлы этого типа.",
+            dictResponseError: "Сервер ответил: {{statusCode}}.",
+            dictCancelUpload: "Отмена",
+            dictCancelUploadConfirmation: "Вы уверены что хотите отменить загрузку?",
+            dictRemoveFile: "Удалить",
+            dictRemoveFileConfirmation: null,
+            dictMaxFilesExceeded: "Вы не можете загружать больше файлов.",
+
+            previewTemplate: "<div class=\"dz-preview dz-file-preview nogrid\">\n  <label>\n  <div class=\"dz-details\">\n  <div class=\"dz-filename\"><span data-dz-name></span></div>\n  <img data-dz-thumbnail />\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-success-mark\"><span>✔</span></div>\n  <div class=\"dz-error-mark\"><span>✘</span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div><div class=\"dz-size pull-left\" data-dz-size></div>\n  <div class=\"dz-main pull-right\" data-dz-input></div>\n  <div class=\"clear\"></div>\n  </div>\n  </label>\n  <div class=\"dz-name\"></div>\n  <div class=\"dz-order\"></div>\n  </div>",
+
+
+        };
+
+        </script>
+
+    {% else %}
+        {{ form.as_p }}
+    {% endif %}
+
+{% endwith %}
+
+<br />
+<br />
+
+{% if wizard.steps.prev %}
+<button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"><i class="fa fa-arrow-left"></i> Предыдущий шаг</button>
+{% endif %}
+
+<button type="submit" class="large red">Далее <i class="fa fa-arrow-right"></i></button>
+</form>
+
+    {% if wizard.steps.current == '0' %}
+    <div class="notice rule">
+        <div class="h5">Правила размещения:</div>
+        <ol>
+            <li><b class="red">Размещение бесплатное.</b></li>
+            <li>Этот сайт не является порталом недвижимости. Он помогает туристам найти жилье для отдыха. Размещаемые здесь объявления только о съеме жилья на короткий срок, посуточно.</li>
+            <li>Пожалуйста не дублируйте, не создавайте одинаковые объявления. Аккаунты которые многократно дублируют свои объявления будут блокироваться администрацией сайта.</li>
+            <li>Старайтесь указывать как можно больше информации об объекте. Чем подробнее вы опишите жилище, тем больше шансов что соискатель его найдет.</li>
+        </ol>
+    </div>
+    {% endif %}
+
+{% endblock %}

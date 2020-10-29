@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load image_tags %}
+{% block title %}{% block header %}{{ object.name }}{% endblock %}{% endblock %}
+
+{% block content %}
+
+<div class="col_12">
+  {% if object.image %}<span class="preview"><a href="{{ object.image.url }}" target="_blank" title="{{ object.name }}"><img src="{{ object.image|from_width:'350' }}" alt="{{ object.name }}" class="pull-left" align="left"></a></span>{% endif %}
+  {{ object.text|safe }}
+</div>
+
+<div class="col_12">
+  <a href="{% url 'article_list' %}" class="button">Читать еще про отдых и жилье</a>
+</div>
+
+{% endblock %}

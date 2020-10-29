@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Выход{% endblock %}
+{% block header %}Выход{% endblock %}
+{% block content %}
+
+<p>Спасибо, что посетили наш сайт.</p>
+
+<p><a href="{% url 'users_login' %}">Войти повторно</a></p>
+
+{% endblock %}

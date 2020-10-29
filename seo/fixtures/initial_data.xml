@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="1" model="seo.page">
+        <field type="CharField" name="url">/flat/</field>
+        <field type="CharField" name="title">Снять квартиру посуточно в {city.where}, цены на квартиры в {city.where}</field>
+        <field type="CharField" name="header">Квартиры посуточно в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="2" model="seo.page">
+        <field type="CharField" name="url">/room/</field>
+        <field type="CharField" name="title">Аренда комнат {city}, снять комнату посуточно в {city.where}</field>
+        <field type="CharField" name="header">Аренда комнат в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="3" model="seo.page">
+        <field type="CharField" name="url">/house/</field>
+        <field type="CharField" name="title">Аренда домов и коттеджей в {city.where}, снять дом посуточно в {city.where}</field>
+        <field type="CharField" name="header">Дома для отдыха в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="4" model="seo.page">
+        <field type="CharField" name="url">/hostel/</field>
+        <field type="CharField" name="title">Цены на хостелы в {city.where}, дешевые хостелы {city}</field>
+        <field type="CharField" name="header">Снять хостел в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="5" model="seo.page">
+        <field type="CharField" name="url">/mini/</field>
+        <field type="CharField" name="title">Мини-отели {city}, аренда мини отеля в {city.where}</field>
+        <field type="CharField" name="header">Мини-отели в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="6" model="seo.page">
+        <field type="CharField" name="url">/hotel/</field>
+        <field type="CharField" name="title">Гостиницы и отели, снять гостиницу в {city.where} дешево, цены на гостиницы в {city.where}</field>
+        <field type="CharField" name="header">Гостиницы и отели в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="7" model="seo.page">
+        <field type="CharField" name="url">/pension/</field>
+        <field type="CharField" name="title">Санатории и пансионаты {city}, отдых в санатории в {city.where}</field>
+        <field type="CharField" name="header">Санатории в {city.where}</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+    <object pk="8" model="seo.page">
+        <field type="CharField" name="url">/</field>
+        <field type="CharField" name="title">Аренда жилья для отдыха, снять посуточно хостел, квартиру, дом или коттедж в {city.where}, цены на гостиницы и отели</field>
+        <field type="CharField" name="header">Аренда жилья для отдыха</field>
+        <field type="CharField" name="keywords"></field>
+        <field type="CharField" name="description"></field>
+        <field type="TextField" name="seo_text"></field>
+    </object>
+</django-objects>

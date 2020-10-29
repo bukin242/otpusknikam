@@ -1,0 +1,12 @@
+<div class="col_12 search">
+    <form action="{% url 'search_list' %}" method="GET">
+        <div class="col_10 alpha">
+            {{ form.q }}
+        </div>
+        <div class="col_2 alpha">
+            <button type="submit"><i class="fa fa-search"></i> Поиск</button>
+        </div>
+        <div class="clear"></div>
+    </form>
+</div>
+<br />

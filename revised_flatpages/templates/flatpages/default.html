@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ flatpage.title|escape }}{% endblock %}
+{% block keywords %}{{ flatpage.keywords|escape }}{% endblock %}
+{% block description %}{{ flatpage.description|escape }}{% endblock %}
+
+{% block header %}
+  {% if flatpage.header %}
+    {{ flatpage.header|escape }}
+  {% else %}
+    {{ flatpage.title|escape }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {{ flatpage.content }}
+{% endblock %}
+

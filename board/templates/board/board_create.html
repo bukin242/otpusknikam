@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Сдать недвижимость для отдыха {% if request.site.city %}в {{ request.site.city.where }}{% endif %}{% endblock %}
+{% block header %}Выберите тип недвижимости, который хотите сдать{% endblock %}
+
+{% block content %}
+
+    {% if type_realty_all %}
+    <ul>
+        {% for k, v in type_realty_all %}
+            <li><a href="{% url 'board_create' k %}">{{ v }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% if object_list %}
+<div class="col_12 menu_top">
+<ul class="menu center">
+    {% for object in object_list %}
+        <li {% if object.active %}class="current"{% endif %}><a href="{{ object.url }}">{{ object.name }}</a></li>
+    {% endfor %}
+</ul>
+</div>
+{% endif %}

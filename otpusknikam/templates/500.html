@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{% block header %}Сайт временно не доступен{% endblock %}{% endblock %}
+
+{#% block head %}<meta http-equiv="refresh" content="60;URL=/">{% endblock %#}
+
+{% block content %}
+Сайт временно не доступен либо перегружен.<br />
+Пожалуйста, зайдите позже.<br /><br />
+<a href="/">На главную</a>
+{% endblock %}

@@ -1,0 +1,542 @@
+{% extends "base.html" %}
+{% load image_tags static file_tags board_tags %}
+
+{% block title %}Снять {{ object.get_type_realty_display|lower }} {% if request.site.city %}в {{ request.site.city.where }}{% endif %}{% if object.street %}, {{ object.street }}{% endif %}. Жилье на отпуск за {{ object.price }} &#8381; в сутки.{% endblock %}
+
+{% block description %}{{ object.text|striptags|truncatewords:20 }}{% endblock %}
+
+{% block header_extend %}
+<div class="header">
+    <div class="col_9">
+        <h1>{{ object.name }}</h1>
+        <div class="gray"><span class="address">{{ object.address }}</span>, {{ object.sleep }}</div>
+    </div>
+    <div class="col_3 right">
+        <div class="price">{{ object.price }} <i class="fa fa-rub"></i></div>
+        <div class="gray">в сутки</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="board_detail">
+        <div class="col_8">
+            {% if object.image.all.exists %}
+            <link rel="stylesheet" type="text/css" href="{% static 'base/css/galleria.classic.css' %}" media="all" />
+            <script type="text/javascript" src="{% static 'base/js/galleria-1.4.2.min.js' %}"></script>
+            <div class="galleria">
+                {% for x in object.image.all %}
+                    <a href="{% get_media_prefix %}{{ x.image }}"><img src="{% get_media_prefix %}{{ x.image }}" {% if x.name %}title="{{ x.name }}"{% endif %}/></a>
+                {% endfor %}
+            </div>
+
+            <script>
+                Galleria.loadTheme('{% static 'base/js/galleria.classic.min.js' %}');
+                Galleria.run('.galleria', {
+                    popupLinks: true,
+                    lightbox: true
+                });
+                Galleria.on('loadfinish', function(e) {
+                    $(e.imageTarget).prop('title', 'Увеличить');
+                });
+            </script>
+            <br />
+            {% endif %}
+
+            <div class="text white">
+              <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+              <!-- Адаптивный -->
+              <ins class="adsbygoogle"
+                   style="display:block; height:90px;"
+                   data-ad-client="ca-pub-2451309164422143"
+                   data-ad-slot="2778692978"
+                   data-ad-format="auto"></ins>
+              <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+              </script>
+            </div>
+            <br />
+
+            <div class="text white">
+                <table>
+                    <tr>
+                        <th>
+                            <div class="h4">{% if object.realty.type_number %}Номер: {{ object.realty.type_number }}{% else %}Описание{% endif %}</div>
+                        </th>
+                    </tr>
+                    {% if object.text %}
+                        <tr>
+                            <td>
+                                {{ object.text|linebreaks }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if object.realty.stars %}
+                        <tr>
+                            <td><i class="fa fa-star-o"></i>
+                                Звёзд: {{ object.realty.stars }}.
+                            </td>
+                        </tr>
+                    {% endif %}
+                        <tr>
+                            <td><i class="fa fa-building-o"></i>
+                                {% if object.realty.floor_number %}Этаж: {{ object.realty.floor_number }}{% if object.realty.floors %} из {{ object.realty.floors }}{% endif %}.{% endif %}
+                                {% if object.realty.elevator %}Есть лифт.{% endif %}
+                                {% if object.realty.balcony %}Есть балкон.{% endif %}
+                                {% if object.realty.repair %}{{ object.realty.get_repair_display }} ремонт.{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-bed"></i>
+                                Спальных мест: {{ object.realty.sleep }}{% if object.price and  object.price.additional_bed != None %} (Доп. место {% if object.price.additional_bed %}за {{ object.price.additional_bed }} <i class="fa fa-rub"></i>{% else %}бесплатно{% endif %}){% endif %}.
+                                {% if object.realty.type_bed %}{{ object.realty.get_type_bed_display }} кровать.{% endif %}
+                            </td>
+                        </tr>
+                    {% if object.realty.count_number or object.realty.living_space or object.realty.total_space or object.realty.kitchen or object.realty.space or object.realty.count != None or object.realty.cooker %}
+                        <tr>
+                            <td><i class="fa fa-th-large"></i>
+                                {% if object.realty.count_number %}Общее кол-во номеров: {{ object.realty.count_number }}.{% endif %}
+                                {% if object.realty.living_space %}Жилая площадь {{ object.realty.living_space }} м².{% endif %}
+                                {% if object.realty.total_space %}Общая площадь {{ object.realty.total_space }} м².{% endif %}
+                                {% if object.realty.kitchen %}Кухня {{ object.realty.kitchen }} м².{% endif %}
+                                {% if object.realty.space %}Площадь комнаты {{ object.realty.space }} м².{% endif %}
+                                {% if object.realty.count != None %} Всего комнат: {{ object.realty.get_count_display }}.{% endif %}
+                                {% if object.realty.cooker %}{{ object.realty.get_cooker_display }} плита.{% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if object.realty.shower or object.realty.wc %}
+                        <tr>
+                            <td><i class="fa fa-male"></i><i class="fa fa-female"></i>
+                                {% if object.realty.shower %}Душ: {{ object.realty.get_shower_display }}.{% endif %}
+                                {% if object.realty.wc %}Санузел: {{ object.realty.get_wc_display }}.{% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+            <br />
+
+            {% if object.realty.hotel_comfort or object.realty.comfort or object.realty.nearby or object.realty.other_comfort or object.realty.lions %}
+            <div class="text white">
+                <table>
+                    <tr>
+                        {% if object.realty.hotel_comfort or object.realty.comfort or object.realty.other_comfort %}
+                            <th class="center" {% if object.realty.nearby or object.realty.lions %}width="50%"{% endif %}>
+                                <div class="h4"><i class="fa fa-magic"></i> Удобства</div>
+                            </th>
+                        {% endif %}
+                        {% if object.realty.nearby or object.realty.lions %}
+                            <th class="center" {% if object.realty.hotel_comfort or object.realty.comfort or object.realty.other_comfort %}width="50%"{% endif %}>
+                                <div class="h4"><i class="fa fa-street-view"></i> Рядом расположены</div>
+                            </th>
+                        {% endif %}
+                    </tr>
+                    {% if object.realty.hotel_comfort or object.realty.comfort or object.realty.nearby %}
+                    <tr>
+                        {% if object.realty.hotel_comfort or object.realty.comfort %}
+                            <td valign="top">
+                                {{ object.realty.hotel_comfort }}
+                                {{ object.realty.comfort }}
+                            </td>
+                        {% endif %}
+                        {% if object.realty.nearby %}
+                            <td valign="top">
+                                {{ object.realty.nearby }}
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                    {% if object.realty.other_comfort or object.realty.lions %}
+                    <tr>
+                        {% if object.realty.other_comfort %}
+                            <td class="center"><i class="fa fa-glass"></i> Остальные удобства</td>
+                        {% endif %}
+                        {% if object.realty.lions %}
+                            <td class="center"><i class="fa fa-university"></i> Местные достопримечательности</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        {% if object.realty.other_comfort %}
+                            <td valign="top">{{ object.realty.other_comfort|linebreaks }}</td>
+                        {% endif %}
+                        {% if object.realty.lions %}
+                            <td valign="top">{{ object.realty.lions|linebreaks }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+            <br />
+            {% endif %}
+
+
+            {% if object.realty.condition or object.realty.other_condition or object.price.checkin or object.price.checkout or object.price.prepay %}
+            <div class="text white">
+                <table>
+                    <tr>
+                        <th>
+                            <div class="h4"><i class="fa fa-asterisk"></i> Условия заселения</div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if object.realty.condition %}
+                                {{ object.realty.condition }}
+                                <hr />
+                            {% endif %}
+
+                            {% if object.realty.other_condition %}
+                                {{ object.realty.other_condition|linebreaks }}
+                                <hr />
+                            {% endif %}
+
+                            {% if object.price.checkin or object.price.checkout %}
+                                {% if object.price.checkin %}
+                                    <i class="fa fa-clock-o"></i> Время заезда: {{ object.price.checkin }}<br />
+                                {% endif %}
+                                {% if object.price.checkout %}
+                                    <i class="fa fa-clock-o"></i> Расчетный час: {{ object.price.checkout }}
+                                {% endif %}
+                                <hr />
+                            {% endif %}
+
+                            {% if object.price.prepay %}
+                                <div class="h4"><i class="fa fa-info"></i> Необходима предоплата: {{ object.price.prepay }}%</div>
+                                <div class="h4">
+                                    <a href="/static/base/image/protect.png" target="_blank"><img src="/static/base/image/link_protect.png"></a>
+                                </div>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            {% endif %}
+
+
+            {% if object.realty.include or object.realty.additional_incude or object.realty.paid or object.realty.additional_paid %}
+            <div class="text white">
+                <table>
+                    <tr>
+                        {% if object.realty.include or object.realty.additional_incude %}
+                            <th><div class="h5"><i class="fa fa-plus-circle"></i> В стоимость включено</div></th>
+                        {% endif %}
+                        {% if object.realty.paid or object.realty.additional_paid %}
+                            <th><div class="h5"><i class="fa fa-money"></i> Дополнительно оплачивается</div></th>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        {% if object.realty.include %}
+                            <td valign="top">{{ object.realty.include }}</td>
+                        {% endif %}
+                        {% if object.realty.paid %}
+                            <td valign="top">{{ object.realty.paid }}</td>
+                        {% endif %}
+                    </tr>
+                    {% if object.realty.additional_incude or object.realty.additional_paid %}
+                    <tr>
+                        {% if object.realty.additional_incude %}
+                            <td><i class="fa fa-child"></i> Дополнительно в стоимость входит</td>
+                        {% endif %}
+                        {% if object.realty.additional_paid %}
+                            <td><i class="fa fa-circle-thin"></i> Дополнительные платные услуги</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        {% if object.realty.additional_incude %}
+                            <td valign="top">{{ object.realty.additional_incude|linebreaks }}</td>
+                        {% endif %}
+                        {% if object.realty.additional_paid %}
+                            <td valign="top">{{ object.realty.additional_paid|linebreaks }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+            <br />
+            {% endif %}
+
+
+            {% if object.discount.all.exists %}
+            <div class="text white">
+                <table>
+                    <tr>
+                        <th>
+                            <div class="h4"><i class="fa fa-money"></i> Скидки</div>
+                        </th>
+                    </tr>
+                    {% for x in object.discount.all %}
+                    <tr>
+                        <td><i class="fa fa-tag"></i> {{ x }} {{ x.stay_view }}{% if x.conditions %} При условии: {{ x.conditions }}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <br />
+            {% endif %}
+
+            {% with object.pricemonth.count as count %}
+                {% if count %}
+                    <div class="text white">
+                        <table>
+                            <tr>
+                                <th {% if count > 1 %}colspan="{{ count }}"{% endif %}>
+                                    <div class="h4"><i class="fa fa-list-alt"></i> Прайс-лист по месяцам</div>
+                                </th>
+                            </tr>
+
+                            {% for x in object.pricemonth.all %}
+                            <tr>
+                                <td width="20%" nowrap="nowrap">С {{ x.from_date }}{% if x.to_date %} по {{ x.to_date }}{% endif %}:</td>
+                                <td width="80%">{{ x }} <i class="fa fa-rub"></i></td>
+                            </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                    <br />
+                {% endif %}
+            {% endwith %}
+
+            <div class="text white">
+                <table>
+                    <tr>
+                        <th>
+                            <div class="h4"><i class="fa fa-map-marker"></i> Карта</div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                          <div id="map" style="height:400px;"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+
+            <div class="clear"></div>
+        </div>
+        <div class="col_4">
+            <div class="vcard">
+                <fieldset class="text">
+                    <table>
+                        <tr>
+                            <td><span class="h4">Объявление № {{ object.pk }}</span>
+                        </tr>
+                        <tr>
+                            <td>Сдаётся {{ object.type_realty_name|lower }} на {{ object.street }}. <br /><a href="#map">На карте</a></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <br />
+                <fieldset class="text">
+                    <table>
+                        <tr>
+                            <td><span class="h4">Владелец:{% if object.contact_name or object.user.profile.name %} <span class="fn">{% if object.contact_name %}{{ object.contact_name }}{% else %}{{ object.user.profile.name }}{% endif %}</span>{% endif %}</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <span class="h4">
+                              <i class="fa fa-phone"></i>
+                              <span class="phone_all"></span>
+                              <span class="protect">
+                                <a href="/static/base/image/protect.png" target="_blank">
+                                  <img src="/static/base/image/link_protect.png" width="130">
+                                </a>
+                              </span>
+                            </span>
+                            </td>
+                        </tr>
+                        {% if object.email %}
+                        <tr>
+                            <td><span><i class="fa fa-envelope-o"></i> <a href="mailto:{{ object.email }}"><span class="email">{{ object.email }}</span></a></span></td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td><i class="fa fa-male"></i> {{ object.get_status_display }}</td>
+                        </tr>
+                    </table>
+                    <div class="clear"></div>
+                </fieldset>
+                <br />
+                <div class="adr text white">
+                    <table class="striped">
+                        <tr>
+                            <td><span class="h4">Расположен: {{ object.get_place_display|lower }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-map-marker"></i> <span class="locality">г. {{ object.city }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-home"></i> <span class="street-address">ул. {{ object.street }}{% if object.number %}, д. {{ object.number }}{% endif %}</span></td>
+                        </tr>
+                        {% if object.metro %}
+                        <tr>
+                            <td><i class="fa fa-subway"></i> До метро: {{ object.metro }} мин. {{ object.get_move_metro_display|lower }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if object.type_beach %}
+                        <tr>
+                            <td><i class="fa fa-sun-o"></i> {{ object.get_type_beach_display }} пляж</td>
+                        </tr>
+                        {% endif %}
+                        {% if object.beach %}
+                        <tr>
+                            <td><i class="fa fa-location-arrow"></i> До пляжа: {{ object.beach }} мин. {{ object.get_move_beach_display|lower }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if object.landmark %}
+                        <tr>
+                            <td><i class="fa fa-car"></i> {{ object.landmark|linebreaks }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                    <div class="clear"></div>
+                </div>
+                <br />
+
+                {% if object.realty.floors or object.realty.type_house or object.realty.housing_estate %}
+                <div class="text white">
+                    <table class="striped">
+                            <tr>
+                                <td><span class="h4">Здание</span></td>
+                            </tr>
+                            {% if object.realty.floors %}
+                            <tr>
+                                <td><i class="fa fa-building-o"></i> Этажей в здании: {{ object.realty.floors }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if object.realty.type_house %}
+                            <tr>
+                                <td><i class="fa fa-cube"></i> Тип дома: {{ object.realty.get_type_house_display }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if object.realty.housing_estate %}
+                            <tr>
+                                <td><i class="fa fa-square-o"></i> ЖК: {{ object.realty.housing_estate }}</td>
+                            </tr>
+                            {% endif %}
+                    </table>
+                </div>
+                <br />
+                {% endif %}
+
+
+                {% if object.price.clearing or object.price.agreement or object.price.documents %}
+                <div class="text white">
+                    <table class="striped">
+                            <tr>
+                                <td><span class="h4">Доп. опции</span></td>
+                            </tr>
+                            {% if object.price.clearing %}
+                            <tr>
+                                <td><i class="fa fa-credit-card"></i> Возможен безналичный расчет</td>
+                            </tr>
+                            {% endif %}
+                            {% if object.price.agreement %}
+                            <tr>
+                                <td><i class="fa fa-file-text-o"></i> Заселение по договору</td>
+                            </tr>
+                            {% endif %}
+                            {% if object.price.documents %}
+                            <tr>
+                                <td><i class="fa fa-check-square-o"></i> Отчетные документы</td>
+                            </tr>
+                            {% endif %}
+                    </table>
+                </div>
+                <br />
+                {% endif %}
+
+
+                {% if object.ownprice.all.exists %}
+                <div class="text white">
+                    <table class="striped">
+                            <tr>
+                                <td><span class="h4">Прайс-листы</span></td>
+                            </tr>
+                            {% for x in object.ownprice.all %}
+                            <tr>
+                                <td><i class="fa fa-download"></i> <a href="{% get_media_prefix %}{{ x }}" target="_blank">{{ x.price|filename }}</a></td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+                <br />
+                {% endif %}
+
+                <div class="text white center">
+                  <!-- admitad.banner: siz6amjamicd69e136398b0fa31d56 Aviasales.ru -->
+                  <a target="_blank" rel="nofollow" href="https://pafutos.com/g/siz6amjamicd69e136398b0fa31d56/?i=4"><img width="250" height="250" border="0" src="https://ad.admitad.com/b/siz6amjamicd69e136398b0fa31d56/" alt="Aviasales.ru"/></a>
+                  <!-- /admitad.banner -->
+                </div>
+                <br />
+
+                <div class="text white center">
+                  <!-- admitad.banner: 19fa602a70cd69e1363909315e6c64 City.Travel -->
+                  <a target="_blank" rel="nofollow" href="https://ad.admitad.com/g/19fa602a70cd69e1363909315e6c64/?i=4"><img width="240" height="400" border="0" src="https://ad.admitad.com/b/19fa602a70cd69e1363909315e6c64/" alt="City.Travel"/></a>
+                  <!-- /admitad.banner -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="clear"></div>
+    <br />
+    <a href="{% if 'otpusknikam.ru' in request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'board_list_type_realty' object.type_realty %}{% endif %}">Назад к списку</a>
+
+    <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
+    <script type="text/javascript">
+
+    $(function() {
+
+        function init() {
+
+            var myMap,
+                myPlacemark;
+
+            address = $('.address').text();
+
+            if(address)
+            {
+                ymaps.geocode(address, { results: 1 }).then(function (res)
+                {
+                    point = res.geoObjects.get(0);
+                    coordinate = point.geometry.getCoordinates();
+
+                    if(coordinate)
+                    {
+                        $('.map_open').show();
+
+                        myMap = new ymaps.Map('map', {
+                            center: coordinate,
+                            zoom: 17,
+                            behaviors: ['default', 'scrollZoom']
+                        });
+                        myMap.controls.add('smallZoomControl');
+
+                        myPlacemark = myMap.geoObjects.add(point);
+                        myPlacemark.options.set('preset', 'twirl#violetIcon');
+
+                        myMap.panTo(coordinate);
+
+                    }
+
+                });
+
+            }
+
+        }
+
+        if(!$('#map').html())
+        {
+            ymaps.ready(init);
+        }
+
+    });
+
+    </script>
+    <script src="{% url 'board_phone' object.type_realty object.pk %}" type="text/javascript"></script>
+{% endblock %}

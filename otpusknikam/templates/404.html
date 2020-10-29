@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load board_tags %}
+
+{% block title %}{% block header %}Страница не найдена{% endblock %}{% endblock %}
+
+{% block content %}
+<center>
+Возможно, данная страница была удалена с сервера или вы набрали неправильный адрес.<br />
+Но есть несколько предложений которые могли бы вас заинтересовать:
+<br />
+</center>
+{% board_list_mini request %}
+<br />
+<a href="/" class="button">Посмотреть еще предложения</a>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% load image_tags %}
+
+{% if object_list %}
+
+<hr>
+<h2>Про отдых и жилье</h2>
+
+<div class="articles-list">
+    {% for object in object_list %}
+    <div class="col_3 item column center">
+
+        <a href="{{ object.get_absolute_url }}" class="h5" title="{{ object.name }}">
+          {% if object.image %}
+            <img src="{{ object.image|from_height:'160' }}" alt="{{ object.name }}">
+          {% endif %}
+          <br /><span>{{ object.name }}</span>
+        </a>
+
+        <p>
+          <a href="{{ object.get_absolute_url }}" class="button green">Читать</a>
+        </p>
+    </div>
+    {% endfor %}
+
+    <div class="col_12">
+      <a href="{% url 'article_list' %}" class="button">Читать еще</a>
+    </div>
+</div>
+
+{% endif %}

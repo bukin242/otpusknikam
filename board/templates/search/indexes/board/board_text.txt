@@ -1,0 +1,33 @@
+{{ object.pk }}.
+{{ object.name }}.
+{{ object.sleep }}.
+{{ object.address }}.
+{% if object.realty.type_number %}Номер {{ object.realty.type_number }}.{% endif %}
+{% if object.realty.type_bed %}{{ object.realty.get_type_bed_display }} кровать.{% endif %}
+{{ object.get_status_display }}.
+{% if object.realty.type_house %}{{ object.realty.get_type_house_display }} дом.{% endif %}
+{% if object.realty.cooker %}{{ object.realty.get_cooker_display }} плита.{% endif %}
+{% if object.discount.all.exists %}Скидки.{% endif %}
+{{ object.type_realty_name }} {{ object.get_place_display|lower }}, в городе {{ object.city.where }}.
+{% if object.type_beach %}{{ object.get_type_beach_display }} пляж.{% endif %}
+{% if object.metro and object.metro < 10 %}Рядом c метро.{% elif object.city.metro %}Есть метро.{% endif %}
+{% if object.beach and object.beach < 10 %}Рядом с пляжем.{% endif %}
+{{ object.text }}
+{{ object.landmark }}
+{{ object.realty.other_comfort }}
+{{ object.realty.additional_incude }}
+{{ object.realty.additional_paid }}
+{{ object.realty.lions }}
+{{ object.realty.other_condition }}
+{{ object.realty.comfort|striptags }}
+{{ object.realty.nearby|striptags }}
+{{ object.realty.condition|striptags }}
+{{ object.realty.include|striptags }}
+{{ object.realty.paid|striptags }}
+{% if object.price.clearing %}Безналичный расчет.{% endif %}
+{% if object.price.agreement %}Заселение по договору.{% endif %}
+{% if object.price.documents %}Отчетные документы.{% endif %}
+{% if object.realty.housing_estate %}ЖК: {{ object.realty.housing_estate }}.{% endif %}
+{% if object.realty.elevator %}Лифт.{% endif %}
+{% if object.realty.balcony %}Балкон.{% endif %}
+{% if object.realty.repair %}{{ object.realty.get_repair_display }} ремонт.{% endif %}

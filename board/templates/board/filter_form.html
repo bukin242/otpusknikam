@@ -1,0 +1,12 @@
+<div class="col_12 filter-form">
+    <form method="GET" action="">
+        Сортировать: {{ form.as_p }}
+        {% for k, v in request.GET.items %}
+            {% if k not in form.fields and k != 'filter_submit' and k != 'page' %}
+                <input type="hidden" name="{{ k }}" value="{{ v }}" />
+            {% endif %}
+        {% endfor %}
+        <input type="hidden" name="filter_submit" class="filter-submit"/>
+    </form>
+    <br />
+</div>

@@ -1,0 +1,23 @@
+{% if is_paginated %}
+<br />
+<div class="pagination">
+    <span>Страницы:</span>
+    {% if page_obj.has_previous %}
+        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}{{ queries }}" class="button">&laquo;</a>
+    {% endif %}
+
+    {% for p in paginator.page_range %}
+        {% spaceless %}
+            {% if p == page_obj.number %}
+                <a class="active button disabled">{{ page_obj.number }}</a>
+            {% else %}
+                <a href="{{ request.path }}?page={{ p }}{{ queries }}" class="button">{{ p }}</a>
+            {% endif %}
+        {% endspaceless %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}{{ queries }}" class="button">&raquo;</a>
+    {% endif %}
+</div>
+{% endif %}

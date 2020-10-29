@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load image_tags %}
+{% block title %}{% block header %}О недвижимости, туризме и отдыхе{% endblock %}{% endblock %}
+
+
+{% block content %}
+
+<div class="articles-list"><br />
+    {% for object in object_list %}
+    <div class="col_12 item column">
+
+        <a href="{{ object.get_absolute_url }}" class="h3 preview" title="{{ object.name }}">{% if object.image %}<img src="{{ object.image|from_height:'160' }}" alt="{{ object.name }}" class="pull-left" align="left"> {% endif %}<span class="link-text">{{ object.name }}</span>
+        </a>
+
+        <div>{{ object.text|striptags|truncatewords:10 }}</div>
+        <p>
+          <a href="{{ object.get_absolute_url }}" class="button green">Читать</a>
+        </p>
+        <div class="clear"></div><hr>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

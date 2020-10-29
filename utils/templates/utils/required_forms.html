@@ -1,0 +1,23 @@
+<script type="text/javascript">
+$(function() {
+    $('form').submit(function() {
+
+        var on_submit = true;
+
+        $(this).find('.required input, .required textarea, .required select').each(function() {
+            if($(this).val() == '') {
+                $(this).css('border', '1px solid red');
+                $(this).attr('placeholder', 'Заполните это поле');
+
+                if(on_submit) {
+                    $(this).focus();
+                }
+
+                on_submit = false;
+            }
+        });
+
+        return on_submit;
+    });
+});
+</script>

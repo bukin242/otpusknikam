@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+{% block header %}Регистрация{% endblock %}
+{% block content %}
+
+   {% if form %}
+        {{ form.media }}
+
+        <fieldset class="width_form col_7 alpha">
+
+            <p>Зарегистрируйте свой аккаунт перед размещением объявлений.</p>
+
+            <form method="post" action="{% url 'users_register' %}" class="vertical">
+                {% csrf_token %}{% load honeypot %}{% render_honeypot_field %}
+
+                {{ form.as_p }}
+
+                <input type="hidden" name="next" value="{{ request.REQUEST.next }}" />
+                <p class="pull-right"><small>Поля, отмеченные <strong class="red">*</strong> - обязательные для заполнения</small></p>
+                <button type="submit" class="pop blue">Зарегистрироваться</button>
+                <div class="clear"></div>
+            </form>
+        </fieldset>
+    {% endif %}
+
+    {% include 'utils/required_forms.html' %}
+
+{% endblock %}
